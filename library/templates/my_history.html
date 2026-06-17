@@ -6,33 +6,24 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>My Borrowed Books</h1>
+    <h1>My Borrow History</h1>
 
     <ul>
-      {% for record in borrowed_books %}
+      {% for record in records %}
 
       <li>
+        {{ record.book.title }}
 
-    {{ record.book.title }}
+        <br />
 
-    <br>
+        Borrowed On: {{ record.borrowed_at|date:"d M Y H:i" }}
 
-    Borrowed On:
-    {{ record.borrowed_at }}
+        <br />
 
-    <br>
+        Status: {% if record.returned %} Returned {% else %} Active {% endif %}
+      </li>
 
-    <a href="/return-book/{{ record.id }}/">
-        Return
-    </a>
-
-</li>
-
-<br>
-
-      {% empty %}
-
-      <li>No books borrowed.</li>
+      <br />
 
       {% endfor %}
     </ul>

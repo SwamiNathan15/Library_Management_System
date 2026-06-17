@@ -87,7 +87,8 @@ def borrow_book(request , id):
 
 def my_books(request):
     borrowed_books = BorrowRecord.objects.filter(
-        user = request.user
+        user = request.user ,
+        returned  =False
     )
     return render(request,
         "my_books.html",
@@ -130,9 +131,20 @@ def return_book(request , id):
     
     record.book.is_available = True
     record.book.save()
-    record.delete()
+    record.returned = True
+    record.save()
 
     return redirect("/my-books/")
 
-
-
+@login_required
+def book_history(request):
+    records = BorrowRecord.objects.filter(
+        user = request.user
+    ).order_by("-borrowed_at")
+    return render(
+        request ,
+        "my_history.html" ,
+        {
+            "records" : records
+        }
+    )
