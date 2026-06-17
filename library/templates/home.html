@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Library Management System</title>
+</head>
+
+<body>
+    <a href = "/add-book">Add New Book</a>
+    <a href="/my-books/"> My Borrowed Books</a>
+
+   
+    <hr>
+
+        <h2>Current User: {{ user }}</h2>
+
+    <h1>Library Management System</h1>
+
+    <h2>Books Available</h2>
+    <ul>
+    {% for book in books %}
+        <li>
+            <a href="/books/{{ book.id }}/">
+                {{ book.title }}
+            </a>
+
+            - {{ book.author }}
+            - ₹{{ book.price }}
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

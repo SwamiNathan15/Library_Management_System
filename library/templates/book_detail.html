@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ book.title }}</title>
+</head>
+
+<body>
+
+<h1>{{ book.title }}</h1>
+
+<p>Author: {{ book.author }}</p>
+
+<p>Price: ₹{{ book.price }}</p>
+
+<a href="/borrow/{{ book.id }}/">
+    Borrow Book
+</a>
+
+<br><br>
+
+<a href="/">← Back to Home</a>
+
+</body>
+</html>
