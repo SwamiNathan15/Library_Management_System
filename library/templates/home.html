@@ -1,33 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Library Management System</title>
-</head>
+  </head>
 
-<body>
-    <a href = "/add-book">Add New Book</a>
+  <body>
+    <a href="/add-book">Add New Book</a>
     <a href="/my-books/"> My Borrowed Books</a>
 
-   
-    <hr>
+    <hr />
 
-        <h2>Current User: {{ user }}</h2>
+    <h2>Current User: {{ user }}</h2>
 
     <h1>Library Management System</h1>
 
+    <h3>Library Statistics</h3>
+
+    <p>Total Books: {{ total_books }}</p>
+
+    <p>Total Borrow Records: {{ total_borrow_records }}</p>
+
+    <p>Active Borrowings: {{ active_borrowings }}</p>
+
+    <p>Returned Books: {{ returned_books }}</p>
+
+    <hr />
+
+    <form method="GET">
+      <input type="text" name="q" placeholder="Search books..." />
+
+      <button type="submit">Search</button>
+    </form>
+
+    <br />
+
     <h2>Books Available</h2>
+    {% if books %}
+
     <ul>
-    {% for book in books %}
-        <li>
-            <a href="/books/{{ book.id }}/">
-                {{ book.title }}
-            </a>
+      {% for book in books %}
+      <li>
+        <a href="/books/{{ book.id }}/"> {{ book.title }} </a>
 
-            - {{ book.author }}
-            - ₹{{ book.price }}
-        </li>
-    {% endfor %}
-</ul>
+        - {{ book.author }} - ₹{{ book.price }}
+      </li>
+      {% endfor %}
+    </ul>
 
-</body>
+    {% else %}
+
+    <h3>No books found.</h3>
+
+    {% endif %}
+  </body>
 </html>

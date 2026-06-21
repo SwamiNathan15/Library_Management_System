@@ -32,13 +32,42 @@ from django.shortcuts import get_object_or_404 , render , redirect
 from .models import Book , BorrowRecord
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def home(request):
-    books = Book.objects.all()
+    query = request.GET.get("q")
+    
+    print(query)
+
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains = query) |
+            Q(author__icontains = query)
+        )
+    else:
+        books = Book.objects.all()
+
+    total_books = Book.objects.count()
+
+    total_borrow_records = BorrowRecord.objects.count()
+
+    active_borrowings = BorrowRecord.objects.filter(
+        returned = False
+    ).count()
+
+    returned_books = BorrowRecord.objects.filter(
+        returned = True
+    ).count()
 
     return render(request ,
                   "home.html",
-                  {"books" : books}
+                  {
+                    "books" : books,
+                    "total_books" : total_books, 
+                    "total_borrow_records" : total_borrow_records , 
+                    "active_borrowings" : active_borrowings ,
+                    "returned_books" : returned_books,
+                    }
     )
 
 
