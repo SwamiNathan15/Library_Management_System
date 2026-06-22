@@ -24,10 +24,25 @@
 
     <p>Returned Books: {{ returned_books }}</p>
 
+    <h3>Price Statistics</h3>
+
+    <p>Total Library Value: ₹{{ price_stats.total_value }}</p>
+
+    <p>Average Book Price: ₹{{ price_stats.average_price }}</p>
+
+    <p>Highest Book Price: ₹{{ price_stats.highest_price }}</p>
+
+    <p>Lowest Book Price: ₹{{ price_stats.lowest_price }}</p>
+
     <hr />
 
     <form method="GET">
-      <input type="text" name="q" placeholder="Search books..." />
+      <input
+    type="text"
+    name="q"
+    value="{{ request.GET.q }}"
+    placeholder="Search books..."
+>
 
       <button type="submit">Search</button>
     </form>
@@ -52,5 +67,23 @@
     <h3>No books found.</h3>
 
     {% endif %}
+
+    <div>
+  {% if page_obj.has_previous %}
+  <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">Previous</a>
+    
+ 
+  {% endif %}
+
+  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+  {% if page_obj.has_next %}
+  <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">
+    Next
+  </a>
+  {% endif %}
+</div>
+
+
   </body>
 </html>

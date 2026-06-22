@@ -33,7 +33,8 @@ from .models import Book , BorrowRecord
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-
+from django.db.models import Sum , Avg , Max , Min
+from django.core.paginator import Paginator
 def home(request):
     query = request.GET.get("q")
     
@@ -47,6 +48,17 @@ def home(request):
     else:
         books = Book.objects.all()
 
+    paginator = Paginator(
+        books ,
+        2
+    )
+
+    page_number = request.GET.get("page")
+
+    page_obj = paginator.get_page(
+        page_number
+    )
+        
     total_books = Book.objects.count()
 
     total_borrow_records = BorrowRecord.objects.count()
@@ -59,6 +71,29 @@ def home(request):
         returned = True
     ).count()
 
+    total_value = Book.objects.aggregate(
+        Sum("price")
+    )
+
+    average_price = Book.objects.aggregate(
+        Avg("price")
+    )
+
+    highest_price = Book.objects.aggregate(
+        Max("price")
+    )
+
+    lowest_price = Book.objects.aggregate(
+        Min("price")
+    )
+
+    price_stats = Book.objects.aggregate(
+        total_value = Sum("price") ,
+        average_price = Avg("price") ,
+        highest_price = Max("price") ,
+        lowest_price = Min("price")
+    )
+
     return render(request ,
                   "home.html",
                   {
@@ -67,6 +102,13 @@ def home(request):
                     "total_borrow_records" : total_borrow_records , 
                     "active_borrowings" : active_borrowings ,
                     "returned_books" : returned_books,
+
+                    "price_stats" : price_stats,
+
+                    "books" : page_obj ,
+
+                    "page_obj" : page_obj ,
+                    
                     }
     )
 
