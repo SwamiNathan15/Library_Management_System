@@ -7,6 +7,7 @@
   <body>
     <a href="/add-book">Add New Book</a>
     <a href="/my-books/"> My Borrowed Books</a>
+    <a href="/my-history">Borrow History</a>
 
     <hr />
 
@@ -38,52 +39,64 @@
 
     <form method="GET">
       <input
-    type="text"
-    name="q"
-    value="{{ request.GET.q }}"
-    placeholder="Search books..."
->
+        type="text"
+        name="q"
+        value="{{ request.GET.q }}"
+        placeholder="Search books..."
+      />
 
       <button type="submit">Search</button>
     </form>
 
     <br />
 
-    <h2>Books Available</h2>
-    {% if books %}
+   <h2>Books Available</h2>
 
-    <ul>
-      {% for book in books %}
-      <li>
-        <a href="/books/{{ book.id }}/"> {{ book.title }} </a>
+{% if books %}
 
-        - {{ book.author }} - ₹{{ book.price }}
-      </li>
-      {% endfor %}
-    </ul>
+<ul>
+    {% for book in books %}
+    <li>
+        <a href="/books/{{ book.id }}/">
+            {{ book.title }}
+        </a>
 
-    {% else %}
+        - {{ book.author }}
+        - ₹{{ book.price }}
 
-    <h3>No books found.</h3>
+        {% if book.is_available %}
+            - <strong style="color: green;">Available ✅</strong>
+        {% else %}
+            - <strong style="color: red;">Borrowed ❌</strong>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 
+{% else %}
+
+<h3>No books found.</h3>
+
+{% if request.GET.q %}
+<p>No books matched "<strong>{{ request.GET.q }}</strong>"</p>
+{% endif %}
+
+{% endif %}
+
+  <div>
+    {% if page_obj.has_previous %}
+        <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">
+            Previous
+        </a>
     {% endif %}
 
-    <div>
-  {% if page_obj.has_previous %}
-  <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">Previous</a>
-    
- 
-  {% endif %}
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
 
-  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-
-  {% if page_obj.has_next %}
-  <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">
-    Next
-  </a>
-  {% endif %}
+    {% if page_obj.has_next %}
+        <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">
+            Next
+        </a>
+    {% endif %}
 </div>
-
-
   </body>
 </html>

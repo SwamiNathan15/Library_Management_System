@@ -1,24 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>{{ book.title }}</title>
-</head>
+  </head>
 
-<body>
+  <body>
+    <a href="/">← Back to Library</a>
 
-<h1>{{ book.title }}</h1>
+    <h1>{{ book.title }}</h1>
 
-<p>Author: {{ book.author }}</p>
+    <p>Author: {{ book.author }}</p>
 
-<p>Price: ₹{{ book.price }}</p>
+    <p>Price: ₹{{ book.price }}</p>
 
-<a href="/borrow/{{ book.id }}/">
-    Borrow Book
-</a>
+    {% if book.is_available %}
 
-<br><br>
+    <p>Status: Available ✅</p>
 
-<a href="/">← Back to Home</a>
+    <a href="/borrow/{{ book.id }}/"> Borrow Book </a>
 
-</body>
+    {% else %}
+
+    <p>Status: Borrowed ❌</p>
+
+    {% endif %}
+  </body>
 </html>
