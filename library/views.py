@@ -35,6 +35,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models import Sum , Avg , Max , Min
 from django.core.paginator import Paginator
+from django.db.models import Count
 def home(request):
     query = request.GET.get("q")
     
@@ -217,5 +218,28 @@ def book_history(request):
         "my_history.html" ,
         {
             "records" : records
+        }
+    )
+
+def dashboard(request):
+    total_books = Book.objects.count() 
+    available_books = Book.objects.filter(
+        is_available = True
+    ).count()
+    borrowed_books = Book.objects.filter(
+        is_available = False
+    ).count()
+    most_borrowed_books = Book.objects.annotate(
+        total_borrows = Count("borrowed_records")
+    ).order_by("-total_borrows" ,"title")
+    return render(
+        request, "dashboard.html" ,{
+            "total_books" : total_books ,
+            
+            "available_books" : available_books ,
+
+            "borrowed_books" : borrowed_books , 
+
+            "most_borrowed_books" : most_borrowed_books ,
         }
     )

@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Dashboard</title>
+  </head>
+
+  <body>
+    <h1>Library Dashboard</h1>
+    <h2>Total Books: {{ total_books }}</h2>
+
+    <h2>Available Books: {{ available_books }}</h2>
+
+    <h2>🔥 Top 5 Most Borrowed Books</h2>
+
+    <ul>
+      {% for book in most_borrowed_books %}
+      <li>{{ book.title }} - {{ book.total_borrows }} borrows</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
